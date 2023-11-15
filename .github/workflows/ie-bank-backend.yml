@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  BACKEND_WEBAPP_DEV: aguadamillas-be-dev
+  BACKEND_WEBAPP_DEV: leomuci-be-dev
 
 jobs:
   build:
@@ -27,12 +27,15 @@ jobs:
       with:
         python-version: "3.11"
     - name: Upgrade pip
+      working-directory: ./ie-bank-be-main
       run: |
         python -m pip install --upgrade pip
     - name: Install dependencies
+      working-directory: ./ie-bank-be-main
       run: |
         pip install -r requirements.txt
     - name: Lint with flake8
+      working-directory: ./ie-bank-be-main
       run: |
         pip install flake8 pytest
         # stop the build if there are Python syntax errors or undefined names
@@ -40,14 +43,15 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
+      working-directory: ./ie-bank-be-main
       run: |
         python -m pytest --cov=iebank_api -v
     - name: Upload artifact for deployment jobs
       uses: actions/upload-artifact@v2
       with:
         name: python-app
-        path: |
-          . 
+        path: ./ie-bank-be-main
+          
 
   deploy:
     runs-on: ubuntu-latest
